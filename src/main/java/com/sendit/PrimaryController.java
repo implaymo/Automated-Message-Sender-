@@ -26,7 +26,7 @@ public class PrimaryController {
             newInput.setPromptText("Write your message here");
 
             Button deleteButton = new Button();
-            deleteButton.setText("x");
+            deleteButton.setText("✖️");
 
             HBox subContainer = new HBox(10);
             subContainer.setAlignment(Pos.CENTER);
