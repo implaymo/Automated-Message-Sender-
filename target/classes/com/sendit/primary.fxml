@@ -9,13 +9,14 @@
 <VBox fx:id="mainContainer" alignment="TOP_CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sendit.PrimaryController">
    <!-- Centered Button at the top -->
    <children>
-      <Button text="+" fx:id="plusButton" onAction="#plusButton" />
+      <Button text="➕" fx:id="plusButton" onAction="#plusButton" />
    </children>
    <!-- Horizontal Box for TextFields -->
    <HBox fx:id="container" spacing="10.0" alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
       <children>
          <TextField fx:id="smallInput" promptText="Small Input" prefWidth="50.0" />
          <TextField fx:id="largeInput" promptText="Large Input" prefWidth="200.0" />
+         <Button text="❌" fx:id="deleteButton" />
       </children>
    </HBox>
    <!-- Padding for the VBox -->
