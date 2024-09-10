@@ -19,6 +19,9 @@ public class GuiController {
     private VBox vboxInput;
 
     @FXML
+    private VBox vboxAbrev;
+
+    @FXML
     private ImageView Exit;
 
     @FXML
@@ -50,9 +53,12 @@ public class GuiController {
 
     @FXML
     private void createInput() {
-        JFXTextField input = new JFXTextField();
-        input.setPromptText("Write message here.");
-        vboxInput.getChildren().add(input);
+        JFXTextField message = new JFXTextField();
+        message.setPromptText("Write message here.");
+        JFXTextField abbreviation = new JFXTextField();
+        abbreviation.setPromptText("Write abbreviation here.");
+        vboxInput.getChildren().add(message);
+        vboxAbrev.getChildren().add(abbreviation);
     }
 
     @FXML 
