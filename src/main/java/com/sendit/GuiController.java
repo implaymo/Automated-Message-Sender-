@@ -6,10 +6,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 import javafx.scene.image.ImageView;
-
-import java.util.ResourceBundle;
-
 import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
+
 
 public class GuiController {
 
@@ -25,11 +24,10 @@ public class GuiController {
     @FXML
     private AnchorPane slider;
 
-    private boolean isPanelVisible = false;
+    private boolean isPanelVisible = true;
 
     @FXML
     private void toggleSlideMenu(){
-        System.out.println("I CLICKED THE MENU");
         TranslateTransition slideTransition = new TranslateTransition(Duration.millis(300), slider);
         if (isPanelVisible) {
             slideTransition.setToX(-slider.getWidth());
@@ -37,22 +35,21 @@ public class GuiController {
             slideTransition.setToX(0);
         }
         slideTransition.play();
+        
         isPanelVisible = !isPanelVisible;
     }
 
     @FXML 
     public void initialize() {
         MenuBack.setOnMouseClicked(event -> {
-            System.out.println("Menu was clicked");
             toggleSlideMenu();
+            System.out.println("Menu was clicked");
         });
 
         Exit.setOnMouseClicked(event -> {
             System.out.println("System exited with success");
             System.exit(0);
         });
-
-
     }
 
 
