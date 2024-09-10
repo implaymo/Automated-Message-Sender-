@@ -1,13 +1,13 @@
 package com.sendit;
 
 
+import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 import javafx.scene.image.ImageView;
 import javafx.animation.TranslateTransition;
-import javafx.event.ActionEvent;
 
 
 public class GuiController {
@@ -23,6 +23,9 @@ public class GuiController {
 
     @FXML
     private AnchorPane slider;
+
+    @FXML
+    private JFXButton Add;
 
     private boolean isPanelVisible = true;
 
@@ -49,6 +52,10 @@ public class GuiController {
         Exit.setOnMouseClicked(event -> {
             System.out.println("System exited with success");
             System.exit(0);
+        });
+
+        Add.setOnMouseClicked(event -> {
+            System.out.println("Add Button clicked!");
         });
     }
 

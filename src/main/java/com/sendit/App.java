@@ -9,8 +9,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- * JavaFX App
- */
+ * JavaFX AppL */
 public class App extends Application {
 
     private static Scene scene;
