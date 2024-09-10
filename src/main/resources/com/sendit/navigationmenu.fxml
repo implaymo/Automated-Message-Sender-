@@ -20,7 +20,7 @@
                <children>
                   <Pane layoutX="174.0" layoutY="20.0" prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: #001d64;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="678.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="Exit" fitHeight="22.0" fitWidth="22.0" layoutX="678.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@./x.png" />
                            </image>
