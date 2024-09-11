@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sendit.RegistrationController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sendit.RegistrationController">
    <left>
       <AnchorPane prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: #04178e;" BorderPane.alignment="CENTER">
          <children>
@@ -35,19 +35,20 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="300.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField layoutX="134.0" layoutY="55.0" />
+            <Label layoutX="15.0" layoutY="94.0" text="Email" />
+            <TextField fx:id="email" layoutX="134.0" layoutY="55.0" />
             <Label layoutX="15.0" layoutY="59.0" text="Username" />
-            <TextField layoutX="134.0" layoutY="90.0" />
-            <Label layoutX="17.0" layoutY="132.0" text="Name" />
-            <TextField layoutX="134.0" layoutY="128.0" />
-            <Label layoutX="18.0" layoutY="171.0" text="Birthday" />
-            <Label layoutX="17.0" layoutY="234.0" text="Password" />
-            <Label layoutX="17.0" layoutY="274.0" text="Confirm Password" />
-            <TextField layoutX="134.0" layoutY="167.0" />
-            <Label layoutX="18.0" layoutY="94.0" text="Email" />
-            <PasswordField layoutX="134.0" layoutY="230.0" />
-            <PasswordField layoutX="134.0" layoutY="270.0" />
-            <Button layoutX="121.0" layoutY="336.0" mnemonicParsing="false" text="Submit " />
+            <TextField fx:id="username" layoutX="134.0" layoutY="90.0" />
+            <Label layoutX="15.0" layoutY="132.0" text="Name" />
+            <TextField fx:id="name" layoutX="134.0" layoutY="128.0" />
+            <Label layoutX="15.0" layoutY="171.0" text="Birthday" />
+            <TextField fx:id="birthday" layoutX="134.0" layoutY="167.0" />
+            <Label layoutX="15.0" layoutY="234.0" text="Password" />
+            <PasswordField fx:id="password" layoutX="134.0" layoutY="230.0" />
+            <Label layoutX="15.0" layoutY="274.0" text="Confirm Password" />
+            <PasswordField fx:id="confirmpassword" layoutX="134.0" layoutY="270.0" />
+
+            <Button fx:id="submit" layoutX="121.0" layoutY="336.0" mnemonicParsing="false" text="Submit " />
          </children>
       </AnchorPane>
    </center>
