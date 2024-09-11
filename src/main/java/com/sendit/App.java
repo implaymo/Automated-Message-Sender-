@@ -2,7 +2,9 @@ package com.sendit;
 
 import java.io.IOException;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,6 +15,12 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     private static Scene scene;
+
+    @FXML
+    private JFXButton login;
+
+    @FXML
+    private JFXButton registration;
 
     @Override
     public void start(Stage stage) throws IOException {

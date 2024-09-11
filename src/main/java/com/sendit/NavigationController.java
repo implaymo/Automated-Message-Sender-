@@ -6,14 +6,22 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.image.ImageView;
 import javafx.animation.TranslateTransition;
 
+import java.io.IOException;
 
-public class GuiController {
+
+public class NavigationController {
+
+    private boolean isPanelVisible = true;
+    private Stage myStage;
+    public void setStage(Stage stage) {
+        myStage = stage;
+    }
 
     @FXML
     private VBox vboxInput;
@@ -36,7 +44,12 @@ public class GuiController {
     @FXML
     private JFXButton Add;
 
-    private boolean isPanelVisible = true;
+    @FXML
+    private JFXButton login;
+
+    @FXML
+    private JFXButton registration;
+
 
     @FXML
     private void toggleSlideMenu(){
@@ -77,6 +90,23 @@ public class GuiController {
             System.out.println("Add Button clicked!");
             createInput();
         });
+
+        login.setOnMouseClicked(event-> {
+            try {
+                App.setRoot("login");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        registration.setOnMouseClicked(event-> {
+            try {
+                App.setRoot("registration");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
     }
 
 
