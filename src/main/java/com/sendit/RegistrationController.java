@@ -4,9 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-
 import java.io.IOException;
-
 public class RegistrationController {
 
     @FXML
@@ -50,7 +48,12 @@ public class RegistrationController {
             String getBirthday = birthday.getText();
             String getPassword = password.getText();
             String getConfirmPassword = confirmpassword.getText();
-            System.out.println(getEmail + " " + getUsername + " " + getName + " " + getBirthday + " " + getPassword + " " + getConfirmPassword);
+            try {
+                Database.getConnection();
+            } catch (Exception e) {
+                System.out.println("ERROR: " + e);
+                throw new RuntimeException(e);
+            }
         });
     }
 }

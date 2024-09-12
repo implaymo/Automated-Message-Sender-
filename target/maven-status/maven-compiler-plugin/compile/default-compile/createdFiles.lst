@@ -1,0 +1,6 @@
+com\sendit\App.class
+com\sendit\NavigationController.class
+com\sendit\LoginController.class
+module-info.class
+com\sendit\Database.class
+com\sendit\RegistrationController.class
