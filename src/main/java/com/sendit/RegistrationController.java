@@ -3,8 +3,11 @@ package com.sendit;
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import java.io.IOException;
+import java.time.LocalDate;
+
 public class RegistrationController {
 
     @FXML
@@ -20,7 +23,7 @@ public class RegistrationController {
     private TextField name;
 
     @FXML
-    private TextField birthday;
+    private DatePicker birthdate;
 
     @FXML
     private TextField password;
@@ -45,7 +48,7 @@ public class RegistrationController {
             String getEmail = email.getText();
             String getUsername = username.getText();
             String getName = name.getText();
-            String getBirthday = birthday.getText();
+            LocalDate getBirthdate = birthdate.getValue();
             String getPassword = password.getText();
             String getConfirmPassword = confirmpassword.getText();
             try {
