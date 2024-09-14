@@ -10,6 +10,8 @@ import java.time.LocalDate;
 
 public class RegistrationController {
 
+    UsersTable newUser = new UsersTable();
+
     @FXML
     private JFXButton home;
 
@@ -51,11 +53,21 @@ public class RegistrationController {
             LocalDate getBirthdate = birthdate.getValue();
             String getPassword = password.getText();
             String getConfirmPassword = confirmpassword.getText();
-            try {
-                Database.getConnection();
-            } catch (Exception e) {
-                System.out.println("ERROR: " + e);
-                throw new RuntimeException(e);
+            if (getPassword.equals(getConfirmPassword)) {
+                try {
+                    Database.getConnection();
+                    newUser.setEmail(getEmail);
+                    newUser.setUsername(getUsername);
+                    newUser.setName(getName);
+                    newUser.setBirthdate(getBirthdate);
+                    newUser.setPassword(getPassword);
+                } catch (Exception e) {
+                    System.out.println("ERROR: " + e);
+                    throw new RuntimeException(e);
+                }
+            }
+            else {
+                System.out.println("Passwords don't match.");
             }
         });
     }

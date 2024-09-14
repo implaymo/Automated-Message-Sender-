@@ -1,15 +1,34 @@
 package com.sendit;
 
-import java.util.Date;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-public class Users {
+import java.time.LocalDate;
+
+@Entity(name = "users")
+@Table(name = "users")
+public class UsersTable {
     // Interacts with users Database. Gets and Sends data
 
+    @Id
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "username")
     private String username;
+
+    @Column(name = "name")
     private String name;
-    private Date birthdate;
+
+    @Column(name = "birthdate")
+    private LocalDate birthdate;
+
+    @Column(name = "password")
     private String password;
 
 
@@ -30,7 +49,7 @@ public class Users {
         return name;
     }
 
-    public Date getBirthdate() {
+    public LocalDate getBirthdate() {
         return birthdate;
     }
 
@@ -48,7 +67,7 @@ public class Users {
     public void setName(String name) {
         this.name = name;
     }
-    public void setBirthdate(Date birthdate) {
+    public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
     }
     public void setPassword(String password) {
