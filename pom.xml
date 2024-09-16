@@ -42,6 +42,13 @@
             <artifactId>hibernate-core</artifactId>
             <version>6.6.0.Final</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-validator/commons-validator -->
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>1.9.0</version>
+        </dependency>
+
 
     </dependencies>
     <build>

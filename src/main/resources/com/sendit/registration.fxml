@@ -50,6 +50,7 @@
             <PasswordField fx:id="confirmpassword" layoutX="134.0" layoutY="270.0" />
 
             <Button fx:id="submit" layoutX="121.0" layoutY="336.0" mnemonicParsing="false" text="Submit " />
+            <Label fx:id="error" layoutX="136.0" layoutY="14.0" textFill="RED" />
 
          </children>
       </AnchorPane>
