@@ -35,34 +35,33 @@ public class RegistrationController {
     @FXML
     private Button submit;
 
-    UsersTable newUser = new UsersTable();
-    String getEmail;
-    String getUsername;
-    String getName;
-    LocalDate getBirthdate;
-    String getPassword;
-    String getConfirmPassword;
+    String formEmail;
+    String formUsername;
+    String formName;
+    LocalDate formBirthdate;
+    String formPassword;
+    String formConfirmPassword;
 
     public void getFormData(){
-        getEmail = email.getText();
-        getUsername = username.getText();
-        getName = name.getText();
-        getBirthdate = birthdate.getValue();
-        getPassword = password.getText();
-        getConfirmPassword = confirmpassword.getText();
+        formEmail = email.getText();
+        formUsername = username.getText();
+        formName = name.getText();
+        formBirthdate = birthdate.getValue();
+        formPassword = password.getText();
+        formConfirmPassword = confirmpassword.getText();
     }
 
     public boolean checkPasswordConfirmation() {
-        return getPassword.equals(getConfirmPassword);
+        return formPassword.equals(formConfirmPassword);
     }
 
     public UsersTable createNewUserFromForm() {
         UsersTable newUser = new UsersTable();
-        newUser.setEmail(getEmail);
-        newUser.setUsername(getUsername);
-        newUser.setBirthdate(getBirthdate);
-        newUser.setName(getName);
-        newUser.setPassword(getPassword);
+        newUser.setEmail(formEmail);
+        newUser.setUsername(formUsername);
+        newUser.setBirthdate(formBirthdate);
+        newUser.setName(formName);
+        newUser.setPassword(formPassword);
         return newUser;
     }
 
