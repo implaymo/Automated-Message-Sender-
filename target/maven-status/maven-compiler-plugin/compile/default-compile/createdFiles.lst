@@ -2,5 +2,8 @@ com\sendit\App.class
 com\sendit\NavigationController.class
 com\sendit\LoginController.class
 module-info.class
+com\sendit\UsersTable.class
 com\sendit\Database.class
+com\sendit\UserDao.class
+com\sendit\MessagesTable.class
 com\sendit\RegistrationController.class

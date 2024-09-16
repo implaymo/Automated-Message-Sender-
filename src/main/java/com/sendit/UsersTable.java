@@ -1,18 +1,17 @@
 package com.sendit;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
-@Entity(name = "users")
+@Entity
 @Table(name = "users")
 public class UsersTable {
     // Interacts with users Database. Gets and Sends data
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 

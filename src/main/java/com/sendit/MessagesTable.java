@@ -1,19 +1,19 @@
 package com.sendit;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
-@Entity(name = "messages")
+import jakarta.persistence.*;
+
+
+@Entity
 @Table(name = "messages")
 public class MessagesTable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-    @Column(name ="message")
+    @Column(name = "message")
     private String message;
 
     @Column(name = "abbreviation")

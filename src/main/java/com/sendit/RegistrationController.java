@@ -7,6 +7,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Date;
 
 public class RegistrationController {
 
@@ -55,14 +56,17 @@ public class RegistrationController {
             String getConfirmPassword = confirmpassword.getText();
             if (getPassword.equals(getConfirmPassword)) {
                 try {
-                    Database.getConnection();
+                    UserDao userDao = new UserDao();
                     newUser.setEmail(getEmail);
                     newUser.setUsername(getUsername);
-                    newUser.setName(getName);
                     newUser.setBirthdate(getBirthdate);
+                    newUser.setName(getName);
                     newUser.setPassword(getPassword);
+                    userDao.saveUser(newUser);
+                    System.out.println("Successfully insert user in database.");
                 } catch (Exception e) {
                     System.out.println("ERROR: " + e);
+                    System.out.println("Couldn't save new user to database.");
                     throw new RuntimeException(e);
                 }
             }
