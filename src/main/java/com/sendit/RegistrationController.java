@@ -5,13 +5,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Date;
 
 public class RegistrationController {
-
-    UsersTable newUser = new UsersTable();
 
     @FXML
     private JFXButton home;
@@ -37,6 +35,37 @@ public class RegistrationController {
     @FXML
     private Button submit;
 
+    UsersTable newUser = new UsersTable();
+    String getEmail;
+    String getUsername;
+    String getName;
+    LocalDate getBirthdate;
+    String getPassword;
+    String getConfirmPassword;
+
+    public void getFormData(){
+        getEmail = email.getText();
+        getUsername = username.getText();
+        getName = name.getText();
+        getBirthdate = birthdate.getValue();
+        getPassword = password.getText();
+        getConfirmPassword = confirmpassword.getText();
+    }
+
+    public boolean checkPasswordConfirmation() {
+        return getPassword.equals(getConfirmPassword);
+    }
+
+    public UsersTable createNewUserFromForm() {
+        UsersTable newUser = new UsersTable();
+        newUser.setEmail(getEmail);
+        newUser.setUsername(getUsername);
+        newUser.setBirthdate(getBirthdate);
+        newUser.setName(getName);
+        newUser.setPassword(getPassword);
+        return newUser;
+    }
+
     @FXML
     public void initialize() {
         home.setOnMouseClicked(event-> {
@@ -46,23 +75,12 @@ public class RegistrationController {
                 throw new RuntimeException(e);
             }
         });
-
         submit.setOnMouseClicked(event-> {
-            String getEmail = email.getText();
-            String getUsername = username.getText();
-            String getName = name.getText();
-            LocalDate getBirthdate = birthdate.getValue();
-            String getPassword = password.getText();
-            String getConfirmPassword = confirmpassword.getText();
-            if (getPassword.equals(getConfirmPassword)) {
+            getFormData();
+            if (checkPasswordConfirmation()) {
                 try {
                     UserDao userDao = new UserDao();
-                    newUser.setEmail(getEmail);
-                    newUser.setUsername(getUsername);
-                    newUser.setBirthdate(getBirthdate);
-                    newUser.setName(getName);
-                    newUser.setPassword(getPassword);
-                    userDao.saveUser(newUser);
+                    userDao.saveUser(createNewUserFromForm());
                     System.out.println("Successfully insert user in database.");
                 } catch (Exception e) {
                     System.out.println("ERROR: " + e);
@@ -74,5 +92,6 @@ public class RegistrationController {
                 System.out.println("Passwords don't match.");
             }
         });
+
     }
 }

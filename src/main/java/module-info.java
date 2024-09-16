@@ -6,6 +6,8 @@ module com.sendit {
     requires mysql.connector.j;
     requires org.hibernate.orm.core;
     requires jakarta.persistence;
+    requires spring.context;
+    requires spring.security.core;
 
     opens com.sendit to javafx.fxml, org.hibernate.orm.core;
     exports com.sendit;
