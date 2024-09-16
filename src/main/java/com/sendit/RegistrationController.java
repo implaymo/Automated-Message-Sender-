@@ -50,28 +50,43 @@ public class RegistrationController {
     String formPassword;
     String formConfirmPassword;
 
-
-    public boolean getFormData(){
+    public void getFormData(){
         formEmail = email.getText();
         formUsername = username.getText();
         formName = name.getText();
         formBirthdate = birthdate.getValue();
         formPassword = password.getText();
         formConfirmPassword = confirmpassword.getText();
+    }
 
-        boolean isEmailValid = EmailValidator.getInstance().isValid(formEmail);
-        if (!isEmailValid) {
-            error.setText("Email invalid. Try again.");
+    public boolean validationForm() {
+        if (formEmail.isEmpty() || formUsername.isEmpty() || formName.isEmpty() || formPassword.isEmpty()
+                || formConfirmPassword.isEmpty()) {
+            error.setText("All fields must be filled.");
             return false;
         }
-        else {
+
+        if (formBirthdate == null) {
+            error.setText("You must provide your Birthdate.");
+            return false;
+        }
+
+        if (!formPassword.equals(formConfirmPassword)) {
+            error.setText("Passwords don't match. Try again");
+            return false;
+        }
+
+        boolean isEmailValid = EmailValidator.getInstance().isValid(formEmail);
+        System.out.println("EMAIL VALID " + formEmail);
+        if (isEmailValid) {
             return true;
+        }
+        else {
+            error.setText("Email invalid. Provide a valid email.");
+            return false;
         }
     }
 
-    public boolean checkPasswordConfirmation() {
-        return formPassword.equals(formConfirmPassword);
-    }
 
     public UsersTable createNewUserFromForm() {
         UsersTable newUser = new UsersTable();
@@ -94,7 +109,7 @@ public class RegistrationController {
         });
         submit.setOnMouseClicked(event-> {
             getFormData();
-            if (checkPasswordConfirmation() && getFormData()) {
+            if (validationForm()) {
                 try {
                     UserDao userDao = new UserDao();
                     userDao.saveUser(createNewUserFromForm());
@@ -104,9 +119,6 @@ public class RegistrationController {
                     System.out.println("Couldn't save new user to database.");
                     throw new RuntimeException(e);
                 }
-            }
-            else {
-                System.out.println("Passwords don't match.");
             }
         });
 
