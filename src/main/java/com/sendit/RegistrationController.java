@@ -7,6 +7,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.apache.commons.validator.routines.EmailValidator;
+import org.passay.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -49,6 +50,14 @@ public class RegistrationController {
     LocalDate formBirthdate;
     String formPassword;
     String formConfirmPassword;
+    PasswordValidator validator = new PasswordValidator(
+            new LengthRule(8, 16),
+            new CharacterRule(EnglishCharacterData.UpperCase, 1),
+            new CharacterRule(EnglishCharacterData.LowerCase, 1),
+            new CharacterRule(EnglishCharacterData.Digit, 1),
+            new CharacterRule(EnglishCharacterData.Special, 1),
+            new WhitespaceRule()
+    );
 
     public void getFormData(){
         formEmail = email.getText();
@@ -59,6 +68,7 @@ public class RegistrationController {
         formConfirmPassword = confirmpassword.getText();
     }
 
+
     public boolean validationForm() {
         if (formEmail.isEmpty() || formUsername.isEmpty() || formName.isEmpty() || formPassword.isEmpty()
                 || formConfirmPassword.isEmpty()) {
@@ -68,6 +78,12 @@ public class RegistrationController {
 
         if (formBirthdate == null) {
             error.setText("You must provide your Birthdate.");
+            return false;
+        }
+
+        RuleResult ruleResult = validator.validate(new PasswordData(formPassword));
+        if (!ruleResult.isValid()) {
+            error.setText("Your password doesn't check all the requirements.");
             return false;
         }
 

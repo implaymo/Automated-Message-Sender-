@@ -7,6 +7,7 @@ module com.sendit {
     requires org.hibernate.orm.core;
     requires jakarta.persistence;
     requires org.apache.commons.validator;
+    requires passay;
 
     opens com.sendit to javafx.fxml, org.hibernate.orm.core;
     exports com.sendit;

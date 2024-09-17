@@ -48,7 +48,12 @@
             <artifactId>commons-validator</artifactId>
             <version>1.9.0</version>
         </dependency>
-
+        <!-- Passay -->
+        <dependency>
+            <groupId>org.passay</groupId>
+            <artifactId>passay</artifactId>
+            <version>1.6.5</version>
+        </dependency>
 
     </dependencies>
     <build>
