@@ -6,14 +6,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.passay.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 
 public class RegistrationController {
+
+    @FXML
+    private VBox messagesVbox;
 
     @FXML
     private Label error;
@@ -83,7 +88,14 @@ public class RegistrationController {
 
         RuleResult ruleResult = validator.validate(new PasswordData(formPassword));
         if (!ruleResult.isValid()) {
-            error.setText("Your password doesn't check all the requirements.");
+            List<String> missingRequirements = validator.getMessages(ruleResult);
+            for (int i = 0; i < (missingRequirements.size() - 1); i++) {
+                Label newLabel = new Label();
+                newLabel.setLayoutX(error.getLayoutX());
+                newLabel.setLayoutY(error.getLayoutY() + 10);
+                newLabel.setText(missingRequirements.get(i));
+                messagesVbox.getChildren().add(newLabel);
+            }
             return false;
         }
 

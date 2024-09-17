@@ -15,7 +15,7 @@ import javafx.animation.TranslateTransition;
 import java.io.IOException;
 
 
-public class NavigationController {
+public class LandingPageController {
 
     private boolean isPanelVisible = true;
     private Stage myStage;
