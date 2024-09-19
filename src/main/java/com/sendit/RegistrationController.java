@@ -57,7 +57,6 @@ public class RegistrationController {
     LocalDate formBirthdate;
     String formPassword;
     String formConfirmPassword;
-    PauseTransition pauseTransition = new PauseTransition(Duration.seconds(10));
     PasswordValidator validator = new PasswordValidator(
             new LengthRule(8, 16),
             new CharacterRule(EnglishCharacterData.UpperCase, 1),
@@ -81,6 +80,7 @@ public class RegistrationController {
         Label newLabel = new Label();
         newLabel.setText(message);
         newLabel.setStyle("-fx-text-fill: red;");
+        newLabel.setId("error");
         messagesVbox.getChildren().add(newLabel);
     }
 
@@ -116,13 +116,18 @@ public class RegistrationController {
         else {
             return true;
         }
+
     }
 
     public void removeErrorMessages() {
-        if (!validationForm()) {
-            pauseTransition.play();
-            messagesVbox.getChildren().clear();
-        }
+        messagesVbox.getChildren().clear();
+    }
+
+    public void delayAndRemoveErrorMessages() {
+        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(5));
+        pauseTransition.setOnFinished(event -> removeErrorMessages());
+        pauseTransition.play();
+
     }
 
 
@@ -157,6 +162,8 @@ public class RegistrationController {
                     System.out.println("Couldn't save new user to database.");
                     throw new RuntimeException(e);
                 }
+            } else {
+                delayAndRemoveErrorMessages();
             }
         });
 
