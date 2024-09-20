@@ -14,7 +14,11 @@ import org.passay.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class RegistrationController {
@@ -65,6 +69,7 @@ public class RegistrationController {
             new CharacterRule(EnglishCharacterData.Special, 1),
             new WhitespaceRule()
     );
+    LocalDate currentDate = LocalDate.now();
 
 
     public void getFormData(){
@@ -84,6 +89,11 @@ public class RegistrationController {
         messagesVbox.getChildren().add(newLabel);
     }
 
+    public long checkUserAdult() {
+        long age = LocalDate.from(formBirthdate).until(currentDate, ChronoUnit.YEARS);
+        return age;
+    }
+
 
     public boolean validationForm() {
         RuleResult ruleResult = validator.validate(new PasswordData(formPassword));
@@ -95,6 +105,10 @@ public class RegistrationController {
         }
         else if (formBirthdate == null) {
             createNewLabel("You must provide your Birthdate.");
+            return false;
+        }
+        else if (checkUserAdult() < 18){
+            createNewLabel("You must be an adult.");
             return false;
         }
         else if (!ruleResult.isValid()) {
