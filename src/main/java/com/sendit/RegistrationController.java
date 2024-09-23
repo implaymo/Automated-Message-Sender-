@@ -138,20 +138,20 @@ public class RegistrationController {
     }
 
     public void delayAndRemoveErrorMessages() {
-        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(5));
+        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2));
         pauseTransition.setOnFinished(event -> removeErrorMessages());
         pauseTransition.play();
 
     }
 
 
-    public UsersTable createNewUserFromForm() {
+    public UsersTable createNewUserFromForm() throws Exception {
         UsersTable newUser = new UsersTable();
         newUser.setEmail(formEmail);
         newUser.setUsername(formUsername);
         newUser.setBirthdate(formBirthdate);
         newUser.setName(formName);
-        newUser.setPassword(formPassword);
+        newUser.setPassword(PBKDF2Hashing.hashPassword(formPassword));
         return newUser;
     }
 
