@@ -168,8 +168,7 @@ public class RegistrationController {
             getFormData();
             if (validationForm()) {
                 try {
-                    UserDao userDao = new UserDao();
-                    userDao.saveUser(createNewUserFromForm());
+                    UserDao.saveUser(createNewUserFromForm());
                     System.out.println("Successfully insert user in database.");
                 } catch (Exception e) {
                     System.out.println("ERROR: " + e);

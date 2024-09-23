@@ -9,14 +9,15 @@ import java.io.IOException;
 
 public class LoginController {
 
+
     @FXML
     private JFXButton home;
 
     @FXML
-    private TextField username;
+    private TextField formUsername;
 
     @FXML
-    private TextField password;
+    private TextField formPassword;
 
     @FXML
     private Button submit;
@@ -32,9 +33,9 @@ public class LoginController {
         });
 
         submit.setOnMouseClicked(event-> {
-            String getUsername = username.getText();
-            String getPassword = password.getText();
-            System.out.println(getUsername + " " + getPassword);
+            String getFormUsername = formUsername.getText();
+            String getFormPassword = formPassword.getText();
+            UserDao.getUser(getFormUsername);
         });
     }
 }

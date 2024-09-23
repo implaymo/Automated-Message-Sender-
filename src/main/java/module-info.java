@@ -8,7 +8,7 @@ module com.sendit {
     requires org.apache.commons.validator;
     requires passay;
     requires java.desktop;
-    requires org.bouncycastle.provider;
+    requires java.naming;
 
     opens com.sendit to javafx.fxml, org.hibernate.orm.core;
     exports com.sendit;
