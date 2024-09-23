@@ -1,5 +1,7 @@
 package com.sendit;
 
+import org.bouncycastle.jcajce.provider.symmetric.ARC4;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.SecureRandom;
@@ -8,14 +10,27 @@ import java.util.Base64;
 
 public class PBKDF2Hashing {
 
-    public static String hashPassword(String password) throws Exception {
-        SecureRandom secureRandom = new SecureRandom();
-        byte[] salt = new byte[16];
-        secureRandom.nextBytes(salt);
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256);
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+    public static String hashPassword(String password, UsersTable usersTable) throws Exception {
+        String hashedPass = null;
+        try {
+            SecureRandom secureRandom = new SecureRandom();
+            byte[] salt = new byte[16];
+            secureRandom.nextBytes(salt);
 
-        byte[] hash = factory.generateSecret(spec).getEncoded();
-        return Base64.getEncoder().encodeToString(hash);
+            String saltToString = Base64.getEncoder().encodeToString(salt);
+            usersTable.setSalt(saltToString);
+
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256);
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+
+            byte[] hash = factory.generateSecret(spec).getEncoded();
+            hashedPass = Base64.getEncoder().encodeToString(hash);
+            return hashedPass;
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e);
+        }
+        hashedPass = "Password wasn't hashed";
+        return hashedPass;
     }
 }
+

@@ -151,7 +151,7 @@ public class RegistrationController {
         newUser.setUsername(formUsername);
         newUser.setBirthdate(formBirthdate);
         newUser.setName(formName);
-        newUser.setPassword(PBKDF2Hashing.hashPassword(formPassword));
+        newUser.setPassword(PBKDF2Hashing.hashPassword(formPassword, newUser));
         return newUser;
     }
 

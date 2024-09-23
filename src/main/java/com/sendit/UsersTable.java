@@ -30,6 +30,9 @@ public class UsersTable {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "salt")
+    private String salt;
+
 
     // Getters
     public int getId() {
@@ -56,6 +59,10 @@ public class UsersTable {
         return password;
     }
 
+    public String getSalt() {
+        return salt;
+    }
+
     // Setters
     public void setEmail(String email) {
         this.email = email;
@@ -71,5 +78,9 @@ public class UsersTable {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }
