@@ -100,19 +100,19 @@ public class RegistrationController {
                 isConfirmPasswordValid();
     }
 
-    public boolean isEmailValid(){
-        boolean isEmailValid = EmailValidator.getInstance().isValid(formEmail);
-        if (!isEmailValid) {
-            createNewLabel("Email invalid. Provide a valid email.");
+    public boolean isAllFieldsFilled(){
+        if (formEmail.isEmpty() || formUsername.isEmpty() || formName.isEmpty() || formPassword.isEmpty()
+                || formConfirmPassword.isEmpty()) {
+            createNewLabel("All fields must be filled.");
             return false;
         }
         return true;
     }
 
-    public boolean isAllFieldsFilled(){
-        if (formEmail.isEmpty() || formUsername.isEmpty() || formName.isEmpty() || formPassword.isEmpty()
-                || formConfirmPassword.isEmpty()) {
-            createNewLabel("All fields must be filled.");
+    public boolean isEmailValid(){
+        boolean isEmailValid = EmailValidator.getInstance().isValid(formEmail);
+        if (!isEmailValid) {
+            createNewLabel("Email invalid. Provide a valid email.");
             return false;
         }
         return true;
