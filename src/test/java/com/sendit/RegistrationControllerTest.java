@@ -7,7 +7,8 @@ class RegistrationControllerTest {
 
     @Test
     void isEmailValidTest() {
-
+        RegistrationController registrationController = new RegistrationController();
+        registrationController.isEmailValid("lol@gmail.com");
     }
   
 }

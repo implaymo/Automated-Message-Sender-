@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Locale;
 
 
 public class RegistrationController {
@@ -92,24 +93,21 @@ public class RegistrationController {
     }
 
 
-    public boolean isFormValid() {
-        return isAllFieldsFilled() &&
-                isEmailValid() &&
-                isBirthdateValid() &&
-                isPasswordValid() &&
-                isConfirmPasswordValid();
-    }
-
-    public boolean isAllFieldsFilled(){
+    public boolean isAllFieldsFilled(String formEmail,
+                                     String formUsername,
+                                     String formName,
+                                     LocalDate formBirthdate,
+                                     String formPassword,
+                                     String formConfirmPassword){
         if (formEmail.isEmpty() || formUsername.isEmpty() || formName.isEmpty() || formPassword.isEmpty()
-                || formConfirmPassword.isEmpty()) {
+                || formConfirmPassword.isEmpty() || formBirthdate == null) {
             createNewLabel("All fields must be filled.");
             return false;
         }
         return true;
     }
 
-    public boolean isEmailValid(){
+    public boolean isEmailValid(String formEmail){
         boolean isEmailValid = EmailValidator.getInstance().isValid(formEmail);
         if (!isEmailValid) {
             createNewLabel("Email invalid. Provide a valid email.");
@@ -118,7 +116,7 @@ public class RegistrationController {
         return true;
     }
 
-    public boolean isBirthdateValid(){
+    public boolean isBirthdateValid(LocalDate formBirthdate){
         if (formBirthdate == null) {
             createNewLabel("You must provide your Birthdate.");
             return false;
@@ -130,7 +128,7 @@ public class RegistrationController {
         return true;
     }
 
-    public boolean isPasswordValid() {
+    public boolean isPasswordValid(String formPassword) {
         RuleResult ruleResult = validator.validate(new PasswordData(formPassword));
         if (!ruleResult.isValid()) {
             List<String> missingRequirements = validator.getMessages(ruleResult);
@@ -142,12 +140,25 @@ public class RegistrationController {
         return true;
     }
 
-    public boolean isConfirmPasswordValid() {
+    public boolean isConfirmPasswordValid(String formPassword, String formConfirmPassword) {
         if (!formPassword.equals(formConfirmPassword)) {
             createNewLabel("Passwords don't match. Try again");
             return false;
         }
         return  true;
+    }
+
+    public boolean isFormValid() {
+        return isAllFieldsFilled(formEmail,
+                formUsername,
+                formName,
+                formBirthdate,
+                formPassword,
+                formConfirmPassword) &&
+                isEmailValid(formEmail) &&
+                isBirthdateValid(formBirthdate) &&
+                isPasswordValid(formPassword) &&
+                isConfirmPasswordValid(formConfirmPassword);
     }
 
     public void removeErrorMessages() {
