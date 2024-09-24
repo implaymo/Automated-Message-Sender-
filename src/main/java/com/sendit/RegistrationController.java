@@ -14,11 +14,8 @@ import org.passay.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 
 public class RegistrationController {
@@ -95,15 +92,34 @@ public class RegistrationController {
     }
 
 
-    public boolean validationForm() {
-        RuleResult ruleResult = validator.validate(new PasswordData(formPassword));
+    public boolean isFormValid() {
+        return isAllFieldsFilled() &&
+                isEmailValid() &&
+                isBirthdateValid() &&
+                isPasswordValid() &&
+                isConfirmPasswordValid();
+    }
+
+    public boolean isEmailValid(){
         boolean isEmailValid = EmailValidator.getInstance().isValid(formEmail);
+        if (!isEmailValid) {
+            createNewLabel("Email invalid. Provide a valid email.");
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isAllFieldsFilled(){
         if (formEmail.isEmpty() || formUsername.isEmpty() || formName.isEmpty() || formPassword.isEmpty()
                 || formConfirmPassword.isEmpty()) {
             createNewLabel("All fields must be filled.");
             return false;
         }
-        else if (formBirthdate == null) {
+        return true;
+    }
+
+    public boolean isBirthdateValid(){
+        if (formBirthdate == null) {
             createNewLabel("You must provide your Birthdate.");
             return false;
         }
@@ -111,26 +127,27 @@ public class RegistrationController {
             createNewLabel("You must be an adult.");
             return false;
         }
-        else if (!ruleResult.isValid()) {
+        return true;
+    }
+
+    public boolean isPasswordValid() {
+        RuleResult ruleResult = validator.validate(new PasswordData(formPassword));
+        if (!ruleResult.isValid()) {
             List<String> missingRequirements = validator.getMessages(ruleResult);
             for (int i = 0; i < (missingRequirements.size() - 1); i++) {
                 createNewLabel(missingRequirements.get(i));
             }
             return false;
         }
-        else if (!formPassword.equals(formConfirmPassword)) {
+        return true;
+    }
+
+    public boolean isConfirmPasswordValid() {
+        if (!formPassword.equals(formConfirmPassword)) {
             createNewLabel("Passwords don't match. Try again");
             return false;
         }
-
-        else if (!isEmailValid) {
-            createNewLabel("Email invalid. Provide a valid email.");
-            return false;
-        }
-        else {
-            return true;
-        }
-
+        return  true;
     }
 
     public void removeErrorMessages() {
@@ -166,7 +183,7 @@ public class RegistrationController {
         });
         submit.setOnMouseClicked(event-> {
             getFormData();
-            if (validationForm()) {
+            if (isFormValid()) {
                 try {
                     UserDao.saveUser(createNewUserFromForm());
                     System.out.println("Successfully insert user in database.");

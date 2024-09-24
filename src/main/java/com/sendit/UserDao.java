@@ -17,8 +17,7 @@ public class UserDao {
 
     public static void saveUser(UsersTable user) {
         Transaction transaction = null;
-        try (SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-             Session session = sessionFactory.openSession()){
+        try (Session session = HibernateUtil.openSession()){
             transaction = session.beginTransaction();
 
             session.persist(user);
