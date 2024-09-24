@@ -158,7 +158,7 @@ public class RegistrationController {
                 isEmailValid(formEmail) &&
                 isBirthdateValid(formBirthdate) &&
                 isPasswordValid(formPassword) &&
-                isConfirmPasswordValid(formConfirmPassword);
+                isConfirmPasswordValid(formPassword, formConfirmPassword);
     }
 
     public void removeErrorMessages() {
