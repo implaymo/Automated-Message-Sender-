@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Locale;
 
 
 public class RegistrationController {
@@ -59,7 +58,7 @@ public class RegistrationController {
     LocalDate formBirthdate;
     String formPassword;
     String formConfirmPassword;
-    PasswordValidator validator = new PasswordValidator(
+    PasswordValidator passwordRequirements = new PasswordValidator(
             new LengthRule(8, 16),
             new CharacterRule(EnglishCharacterData.UpperCase, 1),
             new CharacterRule(EnglishCharacterData.LowerCase, 1),
@@ -129,9 +128,9 @@ public class RegistrationController {
     }
 
     public boolean isPasswordValid(String formPassword) {
-        RuleResult ruleResult = validator.validate(new PasswordData(formPassword));
+        RuleResult ruleResult = passwordRequirements.validate(new PasswordData(formPassword));
         if (!ruleResult.isValid()) {
-            List<String> missingRequirements = validator.getMessages(ruleResult);
+            List<String> missingRequirements = passwordRequirements.getMessages(ruleResult);
             for (int i = 0; i < (missingRequirements.size() - 1); i++) {
                 createNewLabel(missingRequirements.get(i));
             }
@@ -196,7 +195,8 @@ public class RegistrationController {
             getFormData();
             if (isFormValid()) {
                 try {
-                    UserDao.saveUser(createNewUserFromForm());
+                    UserDao userDao = new UserDao();
+                    userDao.saveUser(createNewUserFromForm());
                     System.out.println("Successfully insert user in database.");
                 } catch (Exception e) {
                     System.out.println("ERROR: " + e);

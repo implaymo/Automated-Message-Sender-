@@ -35,7 +35,9 @@ public class LoginController {
         submit.setOnMouseClicked(event-> {
             String getFormUsername = formUsername.getText();
             String getFormPassword = formPassword.getText();
-            UserDao.getUser(getFormUsername);
+
+            UserDao userDao = new UserDao();
+            userDao.getUser(getFormUsername);
         });
     }
 }

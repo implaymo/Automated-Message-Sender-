@@ -3,10 +3,11 @@ package com.sendit;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.SessionException;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+
+import java.util.List;
 
 public class UserDao {
 
@@ -15,7 +16,7 @@ public class UserDao {
     }
 
 
-    public static void saveUser(UsersTable user) {
+    public void saveUser(UsersTable user) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.openSession()){
             transaction = session.beginTransaction();
@@ -27,18 +28,14 @@ public class UserDao {
         }
     }
 
-    public static boolean getUser(String username) {
-        Long count = null;
+    public void getUser(String username) {
         try (Session session = HibernateUtil.openSession()) {
-            String hql = "SELECT COUNT(u) FROM UsersTable u WHERE u.username = :username";
-            Query<Long> query = session.createQuery(hql, Long.class);
+            String hql = "FROM UsersTable U WHERE U.username = :username";
+            Query query = session.createQuery(hql);
             query.setParameter("username", username);
-            count = query.uniqueResult();
-            System.out.println("Usernames match");
-            return count != null && count > 0;
-        }catch (Exception e) {
+            List results = query.list();
+        }catch (SessionException e) {
             System.out.println("Error: " + e);
-            return false;
         }
     }
 }
