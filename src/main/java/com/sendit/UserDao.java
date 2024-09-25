@@ -6,10 +6,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionException;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class UserDao {
+
+    static final Logger logger = LoggerFactory.getLogger(UserDao.class);
+
 
     public UserDao() {
         Database.getConnection();
@@ -35,13 +40,13 @@ public class UserDao {
             query.setParameter("username", username);
             List results = query.list();
             if (results.size() == 1) {
-                System.out.println("User found.");
+                logger.info("Username found in database.");
                 return true;
             }
         }catch (SessionException e) {
-            System.out.println("Error: " + e);
+            logger.error("Error: {}", String.valueOf(e));
         }
-        System.out.println("User not found");
+        logger.info("Username not found on database.");
         return false;
     }
 }

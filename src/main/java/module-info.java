@@ -9,6 +9,7 @@ module com.sendit {
     requires passay;
     requires java.desktop;
     requires java.naming;
+    requires org.slf4j;
 
     opens com.sendit to javafx.fxml, org.hibernate.orm.core;
     exports com.sendit;
