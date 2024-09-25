@@ -186,7 +186,7 @@ public class RegistrationController {
     public void initialize() {
         home.setOnMouseClicked(event-> {
             try {
-                App.setRoot("navigationmenu");
+                App.setRoot("fxml/navigationmenu");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

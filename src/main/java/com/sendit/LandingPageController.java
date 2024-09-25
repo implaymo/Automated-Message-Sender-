@@ -93,7 +93,7 @@ public class LandingPageController {
 
         login.setOnMouseClicked(event-> {
             try {
-                App.setRoot("login");
+                App.setRoot("fxml/login");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -101,7 +101,7 @@ public class LandingPageController {
 
         registration.setOnMouseClicked(event-> {
             try {
-                App.setRoot("registration");
+                App.setRoot("fxml/registration");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

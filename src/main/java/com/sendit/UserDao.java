@@ -28,14 +28,20 @@ public class UserDao {
         }
     }
 
-    public void getUser(String username) {
+    public boolean getUser(String username) {
         try (Session session = HibernateUtil.openSession()) {
             String hql = "FROM UsersTable U WHERE U.username = :username";
             Query query = session.createQuery(hql);
             query.setParameter("username", username);
             List results = query.list();
+            if (results.size() == 1) {
+                System.out.println("User found.");
+                return true;
+            }
         }catch (SessionException e) {
             System.out.println("Error: " + e);
         }
+        System.out.println("User not found");
+        return false;
     }
 }
