@@ -22,7 +22,7 @@ public class UserDao {
 
 
     public void saveUser(UsersTable user) {
-        Transaction transaction = null;
+        Transaction transaction;
         try (Session session = HibernateUtil.openSession()){
             transaction = session.beginTransaction();
 
@@ -46,7 +46,7 @@ public class UserDao {
         }catch (SessionException e) {
             logger.error("Error: {}", String.valueOf(e));
         }
-        logger.info("Username not found on database.");
+        logger.warn("Username not found on database.");
         return false;
     }
 }
