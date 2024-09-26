@@ -1,0 +1,15 @@
+2024-09-26 19:07:42,493 INFO [JavaFX Application Thread] o.h.Version [Version.java:44] -- HHH000412: Hibernate ORM core version [WORKING]
+2024-09-26 19:07:42,811 INFO [JavaFX Application Thread] o.h.c.i.RegionFactoryInitiator [RegionFactoryInitiator.java:50] -- HHH000026: Second-level cache disabled
+2024-09-26 19:07:42,881 WARN [JavaFX Application Thread] o.h.o.c.pooling [DriverManagerConnectionProviderImpl.java:86] -- HHH10001002: Using built-in connection pool (not intended for production use)
+2024-09-26 19:07:43,360 INFO [JavaFX Application Thread] o.h.o.c.pooling [JdbcEnvironmentInitiator.java:158] -- HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/sendit]
+	Database driver: com.mysql.cj.jdbc.Driver
+	Database version: 8.0.39
+	Autocommit mode: false
+	Isolation level: undefined/unknown
+	Minimum pool size: 1
+	Maximum pool size: 20
+2024-09-26 19:07:45,010 INFO [JavaFX Application Thread] o.h.o.c.access [DdlTransactionIsolatorNonJtaImpl.java:52] -- HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@552bac87] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+2024-09-26 19:07:45,453 WARN [JavaFX Application Thread] c.s.UserDao [UserDao.java:49] -- Username not found on database.
+2024-09-26 19:07:57,003 INFO [JavaFX Application Thread] c.s.UserDao [UserDao.java:43] -- Username found in database.
+2024-09-26 19:20:52,219 ERROR [JavaFX Application Thread] c.s.UserDao [UserDao.java:49] -- Username not found on database.

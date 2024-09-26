@@ -46,7 +46,7 @@ public class UserDao {
         }catch (SessionException e) {
             logger.error("Error: {}", String.valueOf(e));
         }
-        logger.warn("Username not found on database.");
+        logger.error("Username not found on database.");
         return false;
     }
 }

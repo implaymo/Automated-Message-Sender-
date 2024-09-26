@@ -7,6 +7,7 @@
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%n</pattern>
         </encoder>
     </appender>
+
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>myApp.log</file>
 
@@ -15,13 +16,10 @@
         </encoder>
     </appender>
 
-    <root level="WARN">
-        <appender-ref ref="FILE" />
-    </root>
-    <root level="ERROR">
-        <appender-ref ref="FILE" />
-    </root>
     <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>
+    <logger name="com.sendit" level="ERROR">
+        <appender-ref ref="FILE" />
+    </logger>
 </configuration>
