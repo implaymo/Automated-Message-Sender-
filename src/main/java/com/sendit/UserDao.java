@@ -33,20 +33,21 @@ public class UserDao {
         }
     }
 
-    public boolean getUser(String username) {
+    public UsersTable getUser(String username) {
+        UsersTable loginUser = null;
         try (Session session = HibernateUtil.openSession()) {
             String hql = "FROM UsersTable U WHERE U.username = :username";
             Query query = session.createQuery(hql);
             query.setParameter("username", username);
-            List results = query.list();
-            if (results.size() == 1) {
-                logger.info("Username found in database.");
-                return true;
+            loginUser = (UsersTable) query.getSingleResult();
+            if (loginUser != null) {
+                logger.info("Username found.");
+                return loginUser;
             }
         }catch (SessionException e) {
             logger.error("Error: {}", String.valueOf(e));
         }
-        logger.error("Username not found on database.");
-        return false;
+        logger.info("Username not found.");
+        return loginUser;
     }
 }

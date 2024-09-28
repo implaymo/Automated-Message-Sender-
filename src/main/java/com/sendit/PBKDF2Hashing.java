@@ -1,6 +1,9 @@
 package com.sendit;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.SecureRandom;
@@ -9,6 +12,9 @@ import java.util.Base64;
 
 public class PBKDF2Hashing {
 
+    static final Logger logger = LoggerFactory.getLogger(PBKDF2Hashing.class);
+
+
     public static String hashPassword(String password, UsersTable usersTable) throws Exception {
         String hashedPass = null;
         try {
@@ -16,19 +22,20 @@ public class PBKDF2Hashing {
             byte[] salt = new byte[16];
             secureRandom.nextBytes(salt);
 
-            String saltToString = Base64.getEncoder().encodeToString(salt);
-            usersTable.setSalt(saltToString);
+            usersTable.setSalt(salt);
 
             KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256);
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
 
             byte[] hash = factory.generateSecret(spec).getEncoded();
             hashedPass = Base64.getEncoder().encodeToString(hash);
+            logger.info("Password was hashed.");
             return hashedPass;
         } catch (Exception e) {
             System.out.println("ERROR: " + e);
         }
         hashedPass = "Password wasn't hashed";
+        logger.info("Password wasn't hashed.");
         return hashedPass;
     }
 
@@ -39,7 +46,7 @@ public class PBKDF2Hashing {
 
         byte[] hash = factory.generateSecret(spec).getEncoded();
         String newHash = Base64.getEncoder().encodeToString(hash);
-
+        logger.info("IS PASSWORD VALID? {}", newHash.equals(storedHash));
         return newHash.equals(storedHash);
     }
 }

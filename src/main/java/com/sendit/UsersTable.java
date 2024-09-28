@@ -31,7 +31,7 @@ public class UsersTable {
     private String password;
 
     @Column(name = "salt")
-    private String salt;
+    private byte[] salt;
 
 
     // Getters
@@ -59,7 +59,7 @@ public class UsersTable {
         return password;
     }
 
-    public String getSalt() {
+    public byte[] getSalt() {
         return salt;
     }
 
@@ -80,7 +80,7 @@ public class UsersTable {
         this.password = password;
     }
 
-    public void setSalt(String salt) {
+    public void setSalt(byte[] salt) {
         this.salt = salt;
     }
 }

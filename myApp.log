@@ -13,3 +13,6 @@
 2024-09-26 19:07:45,453 WARN [JavaFX Application Thread] c.s.UserDao [UserDao.java:49] -- Username not found on database.
 2024-09-26 19:07:57,003 INFO [JavaFX Application Thread] c.s.UserDao [UserDao.java:43] -- Username found in database.
 2024-09-26 19:20:52,219 ERROR [JavaFX Application Thread] c.s.UserDao [UserDao.java:49] -- Username not found on database.
+2024-09-28 11:32:58,179 INFO [JavaFX Application Thread] c.s.UserDao [UserDao.java:44] -- Username found.
+2024-09-28 11:32:58,320 INFO [JavaFX Application Thread] c.s.PBKDF2Hashing [PBKDF2Hashing.java:49] -- IS PASSWORD VALID? true
+2024-09-28 11:32:58,320 INFO [JavaFX Application Thread] c.s.LoginController [LoginController.java:46] -- Password verified with success.

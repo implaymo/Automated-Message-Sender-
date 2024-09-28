@@ -19,7 +19,7 @@
     <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>
-    <logger name="com.sendit" level="ERROR">
+    <logger name="com.sendit" level="INFO">
         <appender-ref ref="FILE" />
     </logger>
 </configuration>
