@@ -42,7 +42,7 @@ public class LoginController {
             UserDao userDao = new UserDao();
             UsersTable checkUser = userDao.getUser(getFormUsername);
             try {
-                if (PBKDF2Hashing.verifyPassword(getFormPassword, checkUser.getPassword(), checkUser.getSalt(), 65536, 256)) {
+                if (PBKDF2Hashing.verifyPassword(getFormPassword, checkUser.getPassword(), checkUser.getSalt(), PBKDF2Hashing.iterationCount, PBKDF2Hashing.keyLenght)) {
                     logger.info("Password verified with success.");
                 }
             } catch (Exception e) {

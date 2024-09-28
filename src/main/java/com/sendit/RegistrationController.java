@@ -11,6 +11,8 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.passay.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -19,6 +21,8 @@ import java.util.List;
 
 
 public class RegistrationController {
+
+    static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
 
     @FXML
     private VBox messagesVbox;
@@ -172,13 +176,14 @@ public class RegistrationController {
     }
 
 
-    public UsersTable createNewUserFromForm() throws Exception {
+    public UsersTable createNewUserFromForm() {
         UsersTable newUser = new UsersTable();
         newUser.setEmail(formEmail);
         newUser.setUsername(formUsername);
         newUser.setBirthdate(formBirthdate);
         newUser.setName(formName);
         newUser.setPassword(PBKDF2Hashing.hashPassword(formPassword, newUser));
+        logger.info("Created new user in database.");
         return newUser;
     }
 
@@ -197,10 +202,9 @@ public class RegistrationController {
                 try {
                     UserDao userDao = new UserDao();
                     userDao.saveUser(createNewUserFromForm());
-                    System.out.println("Successfully insert user in database.");
+                    logger.info("Successfully insert user in database.");
                 } catch (Exception e) {
-                    System.out.println("ERROR: " + e);
-                    System.out.println("Couldn't save new user to database.");
+                    logger.error("ERROR: {}", String.valueOf(e));
                     throw new RuntimeException(e);
                 }
             } else {

@@ -13,9 +13,11 @@ import java.util.Base64;
 public class PBKDF2Hashing {
 
     static final Logger logger = LoggerFactory.getLogger(PBKDF2Hashing.class);
+    public static final Integer iterationCount = 65536;
+    public static final Integer keyLenght = 256;
 
 
-    public static String hashPassword(String password, UsersTable usersTable) throws Exception {
+    public static String hashPassword(String password, UsersTable usersTable) {
         String hashedPass = null;
         try {
             SecureRandom secureRandom = new SecureRandom();
@@ -24,7 +26,7 @@ public class PBKDF2Hashing {
 
             usersTable.setSalt(salt);
 
-            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256);
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterationCount, keyLenght);
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
 
             byte[] hash = factory.generateSecret(spec).getEncoded();
