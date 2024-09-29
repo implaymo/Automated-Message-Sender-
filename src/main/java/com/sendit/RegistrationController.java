@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -23,6 +25,9 @@ import java.util.List;
 public class RegistrationController {
 
     static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
+
+    @FXML
+    private AnchorPane form;
 
     @FXML
     private VBox messagesVbox;
@@ -53,6 +58,7 @@ public class RegistrationController {
 
     @FXML
     private Label newError;
+
 
 
 
@@ -196,19 +202,21 @@ public class RegistrationController {
                 throw new RuntimeException(e);
             }
         });
-        submit.setOnMouseClicked(event-> {
-            getFormData();
-            if (isFormValid()) {
-                try {
-                    UserDao userDao = new UserDao();
-                    userDao.saveUser(createNewUserFromForm());
-                    logger.info("Successfully insert user in database.");
-                } catch (Exception e) {
-                    logger.error("ERROR: {}", String.valueOf(e));
-                    throw new RuntimeException(e);
+        form.setOnKeyPressed(event-> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                getFormData();
+                if (isFormValid()) {
+                    try {
+                        UserDao userDao = new UserDao();
+                        userDao.saveUser(createNewUserFromForm());
+                        logger.info("Successfully insert user in database.");
+                    } catch (Exception e) {
+                        logger.error("ERROR: {}", String.valueOf(e));
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    delayAndRemoveErrorMessages();
                 }
-            } else {
-                delayAndRemoveErrorMessages();
             }
         });
 

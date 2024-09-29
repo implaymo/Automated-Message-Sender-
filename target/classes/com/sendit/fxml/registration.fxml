@@ -36,7 +36,7 @@
          </children></AnchorPane>
    </left>
    <center>
-      <AnchorPane prefHeight="200.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+      <AnchorPane fx:id="form" prefHeight="200.0" prefWidth="300.0" BorderPane.alignment="CENTER">
          <children>
             <VBox fx:id="messagesVbox" layoutX="17.0" layoutY="6.0" prefHeight="42.0" prefWidth="271.0">
                <children>
