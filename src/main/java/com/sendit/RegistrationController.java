@@ -2,6 +2,7 @@ package com.sendit;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -211,6 +212,8 @@ public class RegistrationController {
 
     @FXML
     public void initialize() {
+        Platform.runLater(() -> username.requestFocus());
+
         home.setOnMouseClicked(event-> {
             try {
                 App.setRoot("fxml/navigationmenu");
