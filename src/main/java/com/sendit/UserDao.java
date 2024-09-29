@@ -28,6 +28,7 @@ public class UserDao {
 
             session.persist(user);
             transaction.commit();
+            logger.info("User stored in database.");
         } catch (HibernateException e) {
             throw new RuntimeException(e);
         }
