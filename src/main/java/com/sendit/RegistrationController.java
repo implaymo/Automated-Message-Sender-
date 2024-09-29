@@ -193,6 +193,22 @@ public class RegistrationController {
         return newUser;
     }
 
+    public void submitRegistrationForm() {
+        getFormData();
+        if (isFormValid()) {
+            try {
+                UserDao userDao = new UserDao();
+                userDao.saveUser(createNewUserFromForm());
+                logger.info("Successfully insert user in database.");
+            } catch (Exception e) {
+                logger.error("ERROR: {}", String.valueOf(e));
+                throw new RuntimeException(e);
+            }
+        } else {
+            delayAndRemoveErrorMessages();
+        }
+    }
+
     @FXML
     public void initialize() {
         home.setOnMouseClicked(event-> {
@@ -204,20 +220,12 @@ public class RegistrationController {
         });
         form.setOnKeyPressed(event-> {
             if (event.getCode().equals(KeyCode.ENTER)) {
-                getFormData();
-                if (isFormValid()) {
-                    try {
-                        UserDao userDao = new UserDao();
-                        userDao.saveUser(createNewUserFromForm());
-                        logger.info("Successfully insert user in database.");
-                    } catch (Exception e) {
-                        logger.error("ERROR: {}", String.valueOf(e));
-                        throw new RuntimeException(e);
-                    }
-                } else {
-                    delayAndRemoveErrorMessages();
-                }
+                submitRegistrationForm();
             }
+        });
+
+        submit.setOnMouseClicked(mouseEvent -> {
+            submitRegistrationForm();
         });
 
     }

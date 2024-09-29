@@ -30,7 +30,8 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </JFXButton>
-         </children></AnchorPane>
+         </children>
+        </AnchorPane>
     </left>
     <center>
         <AnchorPane fx:id="form" prefHeight="200.0" prefWidth="300.0" BorderPane.alignment="CENTER">
