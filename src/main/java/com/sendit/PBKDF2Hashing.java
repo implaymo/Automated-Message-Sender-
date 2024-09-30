@@ -18,27 +18,20 @@ public class PBKDF2Hashing {
 
 
     public static String hashPassword(String password, UsersTable usersTable) {
-        String hashedPass = null;
         try {
             SecureRandom secureRandom = new SecureRandom();
             byte[] salt = new byte[16];
             secureRandom.nextBytes(salt);
-
             usersTable.setSalt(salt);
 
             KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterationCount, keyLenght);
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-
             byte[] hash = factory.generateSecret(spec).getEncoded();
-            hashedPass = Base64.getEncoder().encodeToString(hash);
-            logger.info("Password was hashed.");
-            return hashedPass;
+            return Base64.getEncoder().encodeToString(hash);
         } catch (Exception e) {
-            System.out.println("ERROR: " + e);
+            logger.error("ERROR: {}", String.valueOf(e));
         }
-        hashedPass = "Password wasn't hashed";
-        logger.info("Password wasn't hashed.");
-        return hashedPass;
+        return null;
     }
 
 
