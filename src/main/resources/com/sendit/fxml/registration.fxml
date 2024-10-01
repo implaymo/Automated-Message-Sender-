@@ -28,11 +28,13 @@
                   <Image url="@../images/registration-icon.png" />
                </image>
             </ImageView>
-            <JFXButton fx:id="home" layoutX="113.0" layoutY="270.0" style="-fx-background-color: orange;" text="HOME" textFill="WHITE">
+            <JFXButton fx:id="home" layoutX="112.0" layoutY="226.0" style="-fx-background-color: orange;" text="HOME" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </JFXButton>
+            <Label layoutX="58.0" layoutY="310.0" text="Already a member?" textFill="WHITE" />
+            <Button fx:id="login" layoutX="169.0" layoutY="306.0" mnemonicParsing="false" style="-fx-background-color: orange;" text="Login" textFill="WHITE" />
          </children></AnchorPane>
    </left>
    <center>

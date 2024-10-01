@@ -38,6 +38,9 @@ public class LoginController {
     @FXML
     private VBox errorVbox;
 
+    @FXML
+    private Button signUp;
+
     public void createNewLabel(String message) {
         Label newLabel = new Label();
         newLabel.setText(message);
@@ -105,6 +108,14 @@ public class LoginController {
         home.setOnMouseClicked(event-> {
             try {
                 App.setRoot("fxml/navigationmenu");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        signUp.setOnMouseClicked(mouseEvent -> {
+            try {
+                App.setRoot("fxml/registration");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

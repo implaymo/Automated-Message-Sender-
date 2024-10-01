@@ -58,8 +58,7 @@ public class RegistrationController {
     private Button submit;
 
     @FXML
-    private Label newError;
-
+    private Button login;
 
 
 
@@ -231,5 +230,12 @@ public class RegistrationController {
             submitRegistrationForm();
         });
 
+        login.setOnMouseClicked(mouseEvent -> {
+            try {
+                App.setRoot("fxml/login");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }
