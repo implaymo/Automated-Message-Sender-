@@ -57,22 +57,26 @@ public class LoginController {
 
     }
 
-
-    public void submitLoginForm() throws Exception {
+    public boolean isLoginValid() throws Exception {
         String getFormUsername = formUsername.getText();
         String getFormPassword = formPassword.getText();
 
         UserDao userDao = new UserDao();
         UsersTable checkUser = userDao.getUser(getFormUsername);
-        if (PBKDF2Hashing.verifyPassword(getFormPassword, checkUser.getPassword(), checkUser.getSalt(), PBKDF2Hashing.iterationCount, PBKDF2Hashing.keyLenght)) {
-            logger.info("Password verified with success.");
+        if (checkUser == null) {
+            logger.info("User not found for username: {}", getFormUsername);
+            createNewLabel("User not found.");
+            return false;
         }
-        else {
-            logger.info("Wrong information.");
-            createNewLabel("Wrong information. Try again.");
+        boolean isPasswordValid = PBKDF2Hashing.verifyPassword(getFormPassword, checkUser.getPassword(), checkUser.getSalt(), PBKDF2Hashing.iterationCount, PBKDF2Hashing.keyLenght);
+        if (!isPasswordValid) {
+            createNewLabel("Credentials wrong.");
+            return false;
         }
-        delayAndRemoveErrorMessages();
+        return true;
     }
+
+
 
     @FXML
     public void initialize() {
@@ -81,19 +85,21 @@ public class LoginController {
         form.setOnKeyPressed(event-> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 try {
-                    submitLoginForm();
+                    isLoginValid();
                 } catch (Exception e) {
-                    logger.error("Error during login:{}", String.valueOf(e));
+                    throw new RuntimeException(e);
                 }
+                delayAndRemoveErrorMessages();
             }
         });
 
         submit.setOnMouseClicked(mouseEvent -> {
             try {
-                submitLoginForm();
+                isLoginValid();
             } catch (Exception e) {
                 logger.error("Error during login:{}", String.valueOf(e));
             }
+            delayAndRemoveErrorMessages();
         });
 
         home.setOnMouseClicked(event-> {
