@@ -39,14 +39,10 @@ public class UserDao {
             Query query = session.createQuery(hql);
             query.setParameter("username", username);
             loginUser = (UsersTable) query.getSingleResult();
-            if (loginUser != null) {
-                logger.info("Username found.");
-                return loginUser;
-            }
-        }catch (SessionException e) {
+            logger.info("Username found.");
+        }catch (Exception e) {
             logger.error("Error: {}", String.valueOf(e));
         }
-        logger.info("Username not found.");
         return loginUser;
     }
 }
