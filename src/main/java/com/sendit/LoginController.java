@@ -1,12 +1,16 @@
 package com.sendit;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +35,29 @@ public class LoginController {
     @FXML
     private Button submit;
 
+    @FXML
+    private VBox errorVbox;
+
+    public void createNewLabel(String message) {
+        Label newLabel = new Label();
+        newLabel.setText(message);
+        newLabel.setStyle("-fx-text-fill: red;");
+        newLabel.setId("error");
+        errorVbox.getChildren().add(newLabel);
+    }
+
+    public void removeErrorMessages() {
+        errorVbox.getChildren().clear();
+    }
+
+    public void delayAndRemoveErrorMessages() {
+        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2));
+        pauseTransition.setOnFinished(event -> removeErrorMessages());
+        pauseTransition.play();
+
+    }
+
+
     public void submitLoginForm() throws Exception {
         String getFormUsername = formUsername.getText();
         String getFormPassword = formPassword.getText();
@@ -42,8 +69,9 @@ public class LoginController {
         }
         else {
             logger.info("Wrong information.");
+            createNewLabel("Wrong information. Try again.");
         }
-
+        delayAndRemoveErrorMessages();
     }
 
     @FXML
