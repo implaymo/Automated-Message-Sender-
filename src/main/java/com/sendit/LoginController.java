@@ -55,8 +55,8 @@ public class LoginController {
         errorVbox.getChildren().clear();
     }
 
-    public void delayAndRemoveErrorMessages() {
-        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(2));
+    public void delayAndRemoveErrorMessages(int seconds) {
+        PauseTransition pauseTransition = new PauseTransition(Duration.seconds(seconds));
         pauseTransition.setOnFinished(event -> removeErrorMessages());
         pauseTransition.play();
 
@@ -90,8 +90,15 @@ public class LoginController {
             alert.setContentText("You failed more than 3 times. You can try again in ");
             alert.showAndWait();
             logger.info("Alert was created.");
+            inputAuthorization(false);
         }
     }
+
+    public void inputAuthorization(boolean allow) {
+        formUsername.setEditable(allow);
+        formPassword.setEditable(allow);
+    }
+
 
 
     @FXML
@@ -106,7 +113,7 @@ public class LoginController {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                delayAndRemoveErrorMessages();
+                delayAndRemoveErrorMessages(2);
             }
         });
 
@@ -116,7 +123,7 @@ public class LoginController {
             } catch (Exception e) {
                 logger.error("Error during login:{}", String.valueOf(e));
             }
-            delayAndRemoveErrorMessages();
+            delayAndRemoveErrorMessages(2);
         });
 
         home.setOnMouseClicked(event-> {
