@@ -53,6 +53,7 @@ public class LoginController {
         @Override
         public void run() {
             enableTextFields(true);
+            disableLoginButton(false);
             logger.info("Timer was started.");
         }
     };
@@ -75,8 +76,6 @@ public class LoginController {
         PauseTransition pauseTransition = new PauseTransition(Duration.seconds(seconds));
         pauseTransition.setOnFinished(event -> removeErrorMessages());
         pauseTransition.play();
-        logger.info("Error messages remove delayed.");
-
     }
 
     public boolean isLoginValid() throws Exception {
@@ -116,9 +115,8 @@ public class LoginController {
     }
 
     public void disableLoginButton(boolean allow) {
-        form.setDisable(allow);
         loginButton.setDisable(allow);
-        logger.info("Disable login.");
+        logger.info("Disable login button.");
     }
 
     public void failedLogin3Times() {
