@@ -16,11 +16,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LoginController {
 
     static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     int count = 0;
+    int delay;
+    int retry = 0;
 
     @FXML
     private AnchorPane form;
@@ -42,6 +46,15 @@ public class LoginController {
 
     @FXML
     private Button signUp;
+
+    Timer timer = new Timer();
+    TimerTask task = new TimerTask() {
+
+        @Override
+        public void run() {
+            enableTextFields(true);
+        }
+    };
 
     public void createNewLabel(String message) {
         Label newLabel = new Label();
@@ -65,18 +78,23 @@ public class LoginController {
     public boolean isLoginValid() throws Exception {
         String getFormUsername = formUsername.getText();
         String getFormPassword = formPassword.getText();
+        if (getFormPassword.isEmpty() && getFormUsername.isEmpty()) {
+            createNewLabel("Fill all fields.");
+            return false;
+        }
 
         UserDao userDao = new UserDao();
         UsersTable checkUser = userDao.getUser(getFormUsername);
         if (checkUser == null) {
             logger.info("User not found for username: {}", getFormUsername);
-            createNewLabel("User not found.");
+            createNewLabel("Invalid login credentials.");
             return false;
         }
+
         boolean isPasswordValid = PBKDF2Hashing.verifyPassword(getFormPassword, checkUser.getPassword(), checkUser.getSalt(), PBKDF2Hashing.iterationCount, PBKDF2Hashing.keyLenght);
         if (!isPasswordValid) {
             count += 1;
-            createNewLabel("Credentials wrong.");
+            createNewLabel("Invalid login credentials.");
             alertTimer();
             return false;
         }
@@ -90,11 +108,14 @@ public class LoginController {
             alert.setContentText("You failed more than 3 times. You can try again in ");
             alert.showAndWait();
             logger.info("Alert was created.");
-            inputAuthorization(false);
+            enableTextFields(false);
+            timer.schedule(task, delay);
+            count = 0;
+            retry++;
         }
     }
 
-    public void inputAuthorization(boolean allow) {
+    public void enableTextFields(boolean allow) {
         formUsername.setEditable(allow);
         formPassword.setEditable(allow);
     }
