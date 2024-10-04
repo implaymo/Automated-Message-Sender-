@@ -49,7 +49,7 @@
             <Label layoutX="58.0" layoutY="296.0" text="Forgot password?" />
             <Button fx:id="submit1" layoutX="161.0" layoutY="292.0" mnemonicParsing="false" prefHeight="19.0" prefWidth="70.0" style="-fx-background-color: orange;" text="Reset" textFill="WHITE" />
                 <StackPane fx:id="stackPaneForLoadingSpinner" layoutX="123.0" layoutY="28.0" prefHeight="42.0" prefWidth="52.0">
-                    <ImageView fx:id="loadingSpinner" fitHeight="28.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                    <ImageView fx:id="loadingSpinner" fitHeight="28.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true" visible="false">
                         <Image url="@../images/pulsespinner.gif"/>
                     </ImageView>
                 </StackPane>

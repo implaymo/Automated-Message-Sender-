@@ -3,6 +3,7 @@ package com.sendit;
 import com.jfoenix.controls.JFXButton;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -22,12 +23,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class LoginController {
-
-    static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-    int loginFailedAttempts = 0;
-    int delay = 30000;
-    boolean failedLogin;
-    int maxLoginFailedAttempts = 5;
 
     @FXML
     private AnchorPane form;
@@ -53,8 +48,11 @@ public class LoginController {
     @FXML
     private ImageView loadingSpinner;
 
-    @FXML
-    private StackPane spinnerStackPane;
+    static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+    int loginFailedAttempts = 0;
+    int delay = 30000;
+    boolean failedLogin;
+    int maxLoginFailedAttempts = 5;
 
     public void startTimer() {
         Timer timer = new Timer();
@@ -69,6 +67,10 @@ public class LoginController {
             }
         };
         timer.schedule(task, delay);
+    }
+
+    public void loadingSpinnerVisibility(boolean show) {
+        loadingSpinner.setVisible(show);
     }
 
     public void createNewLabel(String message) {
@@ -119,6 +121,7 @@ public class LoginController {
             failedLoginTimes();
             return false;
         }
+        loadingSpinnerVisibility(true);
         return true;
     }
 
