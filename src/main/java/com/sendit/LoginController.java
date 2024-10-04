@@ -25,6 +25,7 @@ public class LoginController {
     int loginFailedAttempts = 0;
     int delay = 30000;
     boolean failedLogin;
+    int maxLoginFailedAttempts = 5;
 
     @FXML
     private AnchorPane form;
@@ -55,6 +56,7 @@ public class LoginController {
             public void run() {
                 enableTextFields(true);
                 disableLoginButton(false);
+                increaseTimer();
                 logger.info("Timer was started.");
             }
         };
@@ -92,13 +94,21 @@ public class LoginController {
 
         UserDao userDao = new UserDao();
         UsersTable checkUser = userDao.getUser(getFormUsername);
+
+        if (checkUser == null) {
+            loginFailedAttempts += 1;
+            createNewLabel("Invalid credentials.");
+            logger.info("Invalid creadentials");
+            failedLoginTimes();
+            return false;
+        }
         boolean isPasswordValid = PBKDF2Hashing.verifyPassword(getFormPassword, checkUser.getPassword(), checkUser.getSalt(), PBKDF2Hashing.iterationCount, PBKDF2Hashing.keyLenght);
 
-        if (!isPasswordValid || checkUser == null) {
+        if (!isPasswordValid) {
             loginFailedAttempts += 1;
-            createNewLabel("Invalid login credentials.");
-            logger.info("Invalid creadentials");
-            failedLogin3Times();
+            createNewLabel("Invalid credentials.");
+            logger.info("Invalid credentials");
+            failedLoginTimes();
             return false;
         }
         return true;
@@ -107,7 +117,7 @@ public class LoginController {
     public void alertBox() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Alert Box");
-        alert.setContentText("You failed more than 3 times. You can try again in ");
+        alert.setContentText("You failed more than 3 times. You can try again in " + delay / 1000 + "s");
         alert.showAndWait();
         logger.info("Alert was created.");
     }
@@ -117,23 +127,22 @@ public class LoginController {
         logger.info("Disable login button.");
     }
 
-    public void failedLogin3Times() {
-        if (loginFailedAttempts > 2) {
-            logger.info("Login failed more than 3 times.");
+    public void failedLoginTimes() {
+        if (loginFailedAttempts > maxLoginFailedAttempts) {
+            logger.info("Login failed more than " + maxLoginFailedAttempts + " times.");
             alertBox();
             enableTextFields(false);
             disableLoginButton(true);
             startTimer();
-            increaseDelay();
             failedLogin = true;
             loginFailedAttempts = 0;
         }
     }
 
-    public void increaseDelay() {
+    public void increaseTimer() {
         if (failedLogin){
             delay *= 2;
-            logger.info("Delay increased.");
+            logger.info("Timer increased. Current timer: {}", delay / 1000);
             failedLogin = false;
         }
     }
