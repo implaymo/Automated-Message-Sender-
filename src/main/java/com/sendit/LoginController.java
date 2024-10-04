@@ -22,7 +22,7 @@ import java.util.TimerTask;
 public class LoginController {
 
     static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-    int count = 0;
+    int loginFailedAttempts = 0;
     int delay = 30000;
     boolean failedLogin;
 
@@ -89,15 +89,10 @@ public class LoginController {
 
         UserDao userDao = new UserDao();
         UsersTable checkUser = userDao.getUser(getFormUsername);
-        if (checkUser == null) {
-            createNewLabel("Invalid credentials.");
-            logger.info("Invalid credentials.");
-            return false;
-        }
-
         boolean isPasswordValid = PBKDF2Hashing.verifyPassword(getFormPassword, checkUser.getPassword(), checkUser.getSalt(), PBKDF2Hashing.iterationCount, PBKDF2Hashing.keyLenght);
-        if (!isPasswordValid) {
-            count += 1;
+
+        if (!isPasswordValid || checkUser == null) {
+            loginFailedAttempts += 1;
             createNewLabel("Invalid login credentials.");
             logger.info("Invalid creadentials");
             failedLogin3Times();
@@ -120,7 +115,7 @@ public class LoginController {
     }
 
     public void failedLogin3Times() {
-        if (count > 2) {
+        if (loginFailedAttempts > 2) {
             logger.info("Login failed more than 3 times.");
             alertBox();
             enableTextFields(false);
@@ -128,6 +123,7 @@ public class LoginController {
             timer.schedule(task, delay);
             increaseDelay();
             failedLogin = true;
+            loginFailedAttempts = 0;
         }
     }
 
