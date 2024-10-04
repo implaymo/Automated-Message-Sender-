@@ -51,7 +51,7 @@ public class LoginController {
     private Button signUpButton;
 
     @FXML
-    private ImageView spinnerImage;
+    private ImageView loadingSpinner;
 
     @FXML
     private StackPane spinnerStackPane;
