@@ -47,16 +47,19 @@ public class LoginController {
     @FXML
     private Button signUpButton;
 
-    Timer timer = new Timer();
-    TimerTask task = new TimerTask() {
+    public void startTimer() {
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
 
-        @Override
-        public void run() {
-            enableTextFields(true);
-            disableLoginButton(false);
-            logger.info("Timer was started.");
-        }
-    };
+            @Override
+            public void run() {
+                enableTextFields(true);
+                disableLoginButton(false);
+                logger.info("Timer was started.");
+            }
+        };
+        timer.schedule(task, delay);
+    }
 
     public void createNewLabel(String message) {
         Label newLabel = new Label();
@@ -120,7 +123,7 @@ public class LoginController {
             alertBox();
             enableTextFields(false);
             disableLoginButton(true);
-            timer.schedule(task, delay);
+            startTimer();
             increaseDelay();
             failedLogin = true;
             loginFailedAttempts = 0;
