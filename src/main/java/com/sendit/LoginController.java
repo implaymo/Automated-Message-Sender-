@@ -12,7 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.slf4j.Logger;
@@ -54,14 +53,14 @@ public class LoginController {
     boolean failedLogin;
     int maxLoginFailedAttempts = 5;
 
-    public void startTimer() {
+    public void startTimerThread() {
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
 
             @Override
             public void run() {
                 enableTextFields(true);
-                disableLoginButton(false);
+                loginButtonAvailability(false);
                 increaseTimer();
                 logger.info("Timer was started.");
             }
@@ -69,9 +68,18 @@ public class LoginController {
         timer.schedule(task, delay);
     }
 
-    public void loadingSpinnerVisibility(boolean show) {
-        loadingSpinner.setVisible(show);
+    public void uiThreadTask() {
+        Thread thread = new Thread(() -> {
+            try {
+                loadingSpinner.setVisible(true);
+                isLoginValid();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        thread.start();
     }
+
 
     public void createNewLabel(String message) {
         Label newLabel = new Label();
@@ -121,21 +129,20 @@ public class LoginController {
             failedLoginTimes();
             return false;
         }
-        loadingSpinnerVisibility(true);
         return true;
     }
 
     public void alertBox() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Alert Box");
-        alert.setContentText("You failed more than 3 times. You can try again in " + delay / 1000 + "s");
+        alert.setContentText("You failed more than " + maxLoginFailedAttempts +  "times. You can try again in " + delay / 1000 + "s");
         alert.showAndWait();
         logger.info("Alert was created.");
     }
 
-    public void disableLoginButton(boolean allow) {
+    public void loginButtonAvailability(boolean allow) {
         loginButton.setDisable(allow);
-        logger.info("Disable login button.");
+        logger.info("Login Button Availability changed.");
     }
 
     public void failedLoginTimes() {
@@ -143,8 +150,7 @@ public class LoginController {
             logger.info("Login failed more than " + maxLoginFailedAttempts + " times.");
             alertBox();
             enableTextFields(false);
-            disableLoginButton(true);
-            startTimer();
+            startTimerThread();
             failedLogin = true;
             loginFailedAttempts = 0;
         }
@@ -174,7 +180,7 @@ public class LoginController {
         form.setOnKeyPressed(event-> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 try {
-                    isLoginValid();
+                    uiThreadTask();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -184,7 +190,7 @@ public class LoginController {
 
         loginButton.setOnMouseClicked(mouseEvent -> {
             try {
-                isLoginValid();
+                uiThreadTask();
             } catch (Exception e) {
                 logger.error("Error during login:{}", String.valueOf(e));
             }
