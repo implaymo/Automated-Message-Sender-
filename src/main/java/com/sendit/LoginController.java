@@ -3,8 +3,11 @@ package com.sendit;
 import com.jfoenix.controls.JFXButton;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,10 +16,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -52,8 +57,21 @@ public class LoginController {
     int delay = 30000;
     boolean failedLogin;
     int maxLoginFailedAttempts = 5;
+    String getFormUsername;
+    String getFormPassword;
 
-    public void startTimerThread() {
+    @FXML
+    private void redirectToNewScene(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("landing_page.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene newScene = new Scene(root);
+        stage.setScene(newScene);
+        stage.show();
+    }
+
+
+    public void startTimer() {
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
 
@@ -68,17 +86,19 @@ public class LoginController {
         timer.schedule(task, delay);
     }
 
-    public void uiThreadTask() {
+    public void handlesLoginAndLoadingSpinner() {
         Thread thread = new Thread(() -> {
             try {
-                loadingSpinner.setVisible(true);
+                loadingSpinner.setVisible(false);
                 isLoginValid();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                logger.error("Unable to use thread. ERROR: {}", String.valueOf(e));
             }
         });
         thread.start();
     }
+
+
 
 
     public void createNewLabel(String message) {
@@ -101,32 +121,52 @@ public class LoginController {
         pauseTransition.play();
     }
 
-    public boolean isLoginValid() throws Exception {
-        String getFormUsername = formUsername.getText();
-        String getFormPassword = formPassword.getText();
+    public boolean checkFormData() {
+        getFormUsername = formUsername.getText();
+        getFormPassword = formPassword.getText();
         if (getFormPassword.isEmpty() && getFormUsername.isEmpty()) {
             createNewLabel("Fill all fields.");
             logger.info("Form not filled.");
             return false;
         }
+        return true;
+    }
 
+    public UsersTable fetchUsernameInDatabase(){
         UserDao userDao = new UserDao();
         UsersTable checkUser = userDao.getUser(getFormUsername);
-
         if (checkUser == null) {
-            loginFailedAttempts += 1;
-            createNewLabel("Invalid credentials.");
-            logger.info("Invalid creadentials");
-            failedLoginTimes();
-            return false;
-        }
-        boolean isPasswordValid = PBKDF2Hashing.verifyPassword(getFormPassword, checkUser.getPassword(), checkUser.getSalt(), PBKDF2Hashing.iterationCount, PBKDF2Hashing.keyLenght);
-
-        if (!isPasswordValid) {
             loginFailedAttempts += 1;
             createNewLabel("Invalid credentials.");
             logger.info("Invalid credentials");
             failedLoginTimes();
+            return null;
+        } else {
+            return checkUser;
+        }
+    }
+    public boolean isPasswordValid(UsersTable user) throws Exception {
+        boolean checkPassword = PBKDF2Hashing.verifyPassword(getFormPassword, user.getPassword(), user.getSalt(), PBKDF2Hashing.iterationCount, PBKDF2Hashing.keyLenght);
+        if (!checkPassword) {
+            loginFailedAttempts += 1;
+            createNewLabel("Invalid password.");
+            logger.info("Invalid password.");
+            failedLoginTimes();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isLoginValid() throws Exception {
+        if (!checkFormData()) {
+            return false;
+        }
+        UsersTable newUser = fetchUsernameInDatabase();
+        if (newUser == null) {
+            logger.info("User not found.");
+            return false;
+        }
+        else if (!isPasswordValid(newUser)) {
             return false;
         }
         return true;
@@ -150,7 +190,7 @@ public class LoginController {
             logger.info("Login failed more than " + maxLoginFailedAttempts + " times.");
             alertBox();
             enableTextFields(false);
-            startTimerThread();
+            startTimer();
             failedLogin = true;
             loginFailedAttempts = 0;
         }
@@ -180,7 +220,7 @@ public class LoginController {
         form.setOnKeyPressed(event-> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 try {
-                    uiThreadTask();
+                    isLoginValid();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -190,7 +230,7 @@ public class LoginController {
 
         loginButton.setOnMouseClicked(mouseEvent -> {
             try {
-                uiThreadTask();
+                isLoginValid();
             } catch (Exception e) {
                 logger.error("Error during login:{}", String.valueOf(e));
             }
