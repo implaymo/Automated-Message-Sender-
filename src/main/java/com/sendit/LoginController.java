@@ -5,7 +5,6 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -20,8 +19,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -59,16 +56,9 @@ public class LoginController {
     int maxLoginFailedAttempts = 5;
     String getFormUsername;
     String getFormPassword;
-
-    @FXML
-    private void redirectToNewScene(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("landing_page.fxml"));
-        Parent root = loader.load();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene newScene = new Scene(root);
-        stage.setScene(newScene);
-        stage.show();
-    }
+    boolean formDataFilled = false;
+    boolean userFoundInDatabase = false;
+    boolean userPasswordVerified = false;
 
 
     public void startTimer() {
@@ -89,8 +79,24 @@ public class LoginController {
     public void handlesLoginAndLoadingSpinner() {
         Thread thread = new Thread(() -> {
             try {
-                loadingSpinner.setVisible(false);
-                isLoginValid();
+                Platform.runLater(() -> loadingSpinner.setVisible(true));
+
+                boolean isLoginValid = isLoginValid();
+                Platform.runLater(() -> {
+                    loadingSpinner.setVisible(false);
+                    try {
+                        if (!isLoginValid) {
+                            ifLoginWrongCreatesErrorLabels();
+                            delayAndRemoveErrorMessages(2);
+                        } else {
+                            App.setRoot("fxml/landing_page");
+                        }
+                    } catch (Exception e) {
+                        logger.error("An error occurred. Please try again. ERROR: ", e);
+                        Platform.runLater(() -> createNewLabel("An error occurred. Please try again."));
+                    }
+                });
+
             } catch (Exception e) {
                 logger.error("Unable to use thread. ERROR: {}", String.valueOf(e));
             }
@@ -125,10 +131,10 @@ public class LoginController {
         getFormUsername = formUsername.getText();
         getFormPassword = formPassword.getText();
         if (getFormPassword.isEmpty() && getFormUsername.isEmpty()) {
-            createNewLabel("Fill all fields.");
             logger.info("Form not filled.");
             return false;
         }
+        formDataFilled = true;
         return true;
     }
 
@@ -137,11 +143,11 @@ public class LoginController {
         UsersTable checkUser = userDao.getUser(getFormUsername);
         if (checkUser == null) {
             loginFailedAttempts += 1;
-            createNewLabel("Invalid credentials.");
             logger.info("Invalid credentials");
             failedLoginTimes();
             return null;
         } else {
+            userFoundInDatabase = true;
             return checkUser;
         }
     }
@@ -149,11 +155,11 @@ public class LoginController {
         boolean checkPassword = PBKDF2Hashing.verifyPassword(getFormPassword, user.getPassword(), user.getSalt(), PBKDF2Hashing.iterationCount, PBKDF2Hashing.keyLenght);
         if (!checkPassword) {
             loginFailedAttempts += 1;
-            createNewLabel("Invalid password.");
             logger.info("Invalid password.");
             failedLoginTimes();
             return false;
         }
+        userPasswordVerified = true;
         return true;
     }
 
@@ -163,7 +169,6 @@ public class LoginController {
         }
         UsersTable newUser = fetchUsernameInDatabase();
         if (newUser == null) {
-            logger.info("User not found.");
             return false;
         }
         else if (!isPasswordValid(newUser)) {
@@ -210,6 +215,15 @@ public class LoginController {
         logger.info("Text fields enabled or disabled.");
     }
 
+    public void ifLoginWrongCreatesErrorLabels() {
+        if (!formDataFilled) {
+            createNewLabel("Fill all fields.");
+        } else if (!userFoundInDatabase) {
+            createNewLabel("Invalid credentials.");
+        } else if (!userPasswordVerified) {
+            createNewLabel("Password incorrect.");
+        }
+    }
 
 
     @FXML
@@ -220,26 +234,26 @@ public class LoginController {
         form.setOnKeyPressed(event-> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 try {
-                    isLoginValid();
+                    handlesLoginAndLoadingSpinner();
+                    ifLoginWrongCreatesErrorLabels();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                delayAndRemoveErrorMessages(2);
             }
         });
 
         loginButton.setOnMouseClicked(mouseEvent -> {
             try {
-                isLoginValid();
+                handlesLoginAndLoadingSpinner();
+                ifLoginWrongCreatesErrorLabels();
             } catch (Exception e) {
                 logger.error("Error during login:{}", String.valueOf(e));
             }
-            delayAndRemoveErrorMessages(2);
         });
 
         homeButton.setOnMouseClicked(event-> {
             try {
-                App.setRoot("fxml/navigationmenu");
+                App.setRoot("fxml/landing_page");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
