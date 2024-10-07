@@ -4,9 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,7 +12,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,7 +82,7 @@ public class LoginController {
                     loadingSpinner.setVisible(false);
                     try {
                         if (!isLoginValid) {
-                            ifLoginWrongCreatesErrorLabels();
+                            ifLoginNotSuccess();
                             delayAndRemoveErrorMessages(2);
                         } else {
                             App.setRoot("fxml/landing_page");
@@ -177,6 +173,16 @@ public class LoginController {
         return true;
     }
 
+    public void ifLoginNotSuccess() {
+        if (!formDataFilled) {
+            createNewLabel("Fill all fields.");
+        } else if (!userFoundInDatabase) {
+            createNewLabel("Invalid credentials.");
+        } else if (!userPasswordVerified) {
+            createNewLabel("Password incorrect.");
+        }
+    }
+
     public void alertBox() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Alert Box");
@@ -215,16 +221,6 @@ public class LoginController {
         logger.info("Text fields enabled or disabled.");
     }
 
-    public void ifLoginWrongCreatesErrorLabels() {
-        if (!formDataFilled) {
-            createNewLabel("Fill all fields.");
-        } else if (!userFoundInDatabase) {
-            createNewLabel("Invalid credentials.");
-        } else if (!userPasswordVerified) {
-            createNewLabel("Password incorrect.");
-        }
-    }
-
 
     @FXML
     public void initialize() {
@@ -235,7 +231,6 @@ public class LoginController {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 try {
                     handlesLoginAndLoadingSpinner();
-                    ifLoginWrongCreatesErrorLabels();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -245,7 +240,6 @@ public class LoginController {
         loginButton.setOnMouseClicked(mouseEvent -> {
             try {
                 handlesLoginAndLoadingSpinner();
-                ifLoginWrongCreatesErrorLabels();
             } catch (Exception e) {
                 logger.error("Error during login:{}", String.valueOf(e));
             }
