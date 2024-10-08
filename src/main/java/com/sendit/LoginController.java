@@ -180,7 +180,7 @@ public class LoginController {
             createNewLabel("Invalid credentials.");
         } else if (!userPasswordVerified) {
             createNewLabel("Password incorrect.");
-        }
+        } 
     }
 
     public void alertBox() {
