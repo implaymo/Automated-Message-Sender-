@@ -1,3 +1,4 @@
 src/main/resources/hibernate.cfg.xml
 myApp.log
 credentials.json
+tokens
