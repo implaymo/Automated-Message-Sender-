@@ -31,7 +31,7 @@ public class GoogleCalendar {
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
     private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
-    private static final String CREDENTIALS_FILE_PATH = "AuthCredGoogleApi/credentials.json";
+    private static final String CREDENTIALS_FILE_PATH = "AuthenticationCredentialsGoogleCalendar/credentials.json";
 
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT)
             throws IOException {
