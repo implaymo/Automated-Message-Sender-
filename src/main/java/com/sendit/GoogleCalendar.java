@@ -54,7 +54,7 @@ public class GoogleCalendar {
         return credential;
     }
 
-    public static void getEvents() throws IOException, GeneralSecurityException {
+    public static List<Event> getEvents() throws IOException, GeneralSecurityException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Calendar service =
@@ -70,18 +70,22 @@ public class GoogleCalendar {
                 .setOrderBy("startTime")
                 .setSingleEvents(true)
                 .execute();
-        List<Event> items = events.getItems();
-        if (items.isEmpty()) {
-            System.out.println("No upcoming events found.");
-        } else {
-            System.out.println("Upcoming events");
-            for (Event event : items) {
-                DateTime start = event.getStart().getDateTime();
-                if (start == null) {
-                    start = event.getStart().getDate();
-                }
-                System.out.printf("%s (%s)\n", event.getSummary(), start);
+        List<Event> nextEventsOnCalendar = events.getItems();
+        System.out.println("Upcoming events");
+        for (Event event : nextEventsOnCalendar) {
+            DateTime start = event.getStart().getDateTime();
+            if (start == null) {
+                start = event.getStart().getDate();
             }
+            Time.getCurrentDateAndTime();
+            System.out.printf("%s (%s)\n", event.getSummary(), start);
+        }
+        return nextEventsOnCalendar;
+    }
+
+    public static void checkEventsInLessThan24Hours() throws IOException, GeneralSecurityException {
+        if (getEvents().isEmpty()) {
+            logger.info("No events found");
         }
     }
 }
