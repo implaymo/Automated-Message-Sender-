@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -74,10 +75,11 @@ public class GoogleCalendar {
         System.out.println("Upcoming events");
         for (Event event : nextEventsOnCalendar) {
             DateTime start = event.getStart().getDateTime();
+            ZonedDateTime eventTime = Time.convertToZonedDateTime(start);
+            Time.compareCurrentTimeAndEventTime(eventTime);
             if (start == null) {
                 start = event.getStart().getDate();
             }
-            Time.getCurrentDateAndTime();
             System.out.printf("%s (%s)\n", event.getSummary(), start);
         }
         return nextEventsOnCalendar;
@@ -87,6 +89,7 @@ public class GoogleCalendar {
         if (getEvents().isEmpty()) {
             logger.info("No events found");
         }
+
     }
 }
 
